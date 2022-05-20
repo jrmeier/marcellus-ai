@@ -9,6 +9,7 @@ function App() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [engine, setEngine] = useState('text-davinci-002')
+  const [apiKey, setApiKey] = useState('')
 
 
   const getOpenAIResponse = () => {
@@ -18,7 +19,7 @@ function App() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer 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'
+        'Authorization': `Bearer ${apiKey}`
       }
     }).then(res => res.json())
       .then(res => {
@@ -46,6 +47,9 @@ function App() {
 
   return (<>
     <div className="App">
+      <p>
+        Api Key: <input type="text" value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
+      </p>
       <p>Max Tokens: <input type="number" onChange={(e)=>handleTokens(e.target.value)} value={tokens}></input>
       <br/>{error}</p>
       <p>Engine: 
