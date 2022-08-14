@@ -5,11 +5,18 @@ import './App.css';
 function App() {
   const [prompt, setPrompt] = useState('')
   const [answer, setAnswer] = useState('')
+  const [responses, setReponses] = useState([])
   const [tokens, setTokens] = useState(1500)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [engine, setEngine] = useState('text-davinci-002')
   const [apiKey, setApiKey] = useState('')
+
+  const urlParams = new URLSearchParams(window.location.search)
+
+  if(!apiKey && urlParams.get('apiKey')) {
+    setApiKey(urlParams.get('apiKey'))
+  }
 
 
   const getOpenAIResponse = () => {
@@ -23,7 +30,7 @@ function App() {
       }
     }).then(res => res.json())
       .then(res => {
-        setAnswer(res.choices[0].text)
+        setReponses(res.choices)
         setIsLoading(false)
       }
       ).catch(err => {  
@@ -64,8 +71,8 @@ function App() {
       <button onClick={getOpenAIResponse}>Submit</button>
     </div>
     <div style={{ border: '1px solid black;', display: 'block', width: '400px', height: '500px'}}>
-      <h4>Response</h4>
-      {isLoading ? 'Doing cool ai things please hold....' :answer}
+      <h4>Responses: </h4>
+      {isLoading ? 'Doing cool ai things please hold....' : responses.map((response, index) => <p key={index}>{response?.text}</p>)}
     </div>
     </>);
 }
